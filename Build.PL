@@ -1,6 +1,16 @@
 use Module::Build;
 
-Module::Build -> new
+my $class = Module::Build->subclass(code => <<'EOF');
+
+sub ACTION_build
+{
+	my $self = shift;
+	$self->SUPER::ACTION_build(@_);
+	$self->run_perl_script('scripts/copy.config.pl');
+}
+EOF
+
+$class -> new
 (
  module_name    => 'Business::Cart::Generic',
  license        => 'artistic',
@@ -26,10 +36,10 @@ Module::Build -> new
  	 DBIx::Class                 => 0.08121,
  	 DBIx::Class::Schema::Loader => 0.06001,
  	 DBIx::Connector             => 0.42,
+	 File::Copy                  => 2.18,
  	 File::HomeDir               => 0.97,
 	 FindBin                     => 1.50,
 	 IO::File                    => 1.14,
-	 IO::Scalar                  => 2.110,
  	 JSON::XS                    => 2.3,
 	 Lingua::EN::Inflect::Number => 1.1,
  	 Log::Handler::Output::DBI   => 0.11,

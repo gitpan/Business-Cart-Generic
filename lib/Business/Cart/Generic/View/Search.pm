@@ -11,7 +11,7 @@ extends 'Business::Cart::Generic::View::Base';
 
 use namespace::autoclean;
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 # -----------------------------------------------
 
@@ -70,7 +70,8 @@ sub display
 		(
 		'basic.table.tx',
 		 {
-			 row => $order,
+			 border => 0,
+			 row    => $order,
 		 }
 		);
 

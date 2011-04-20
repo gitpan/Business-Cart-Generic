@@ -21,7 +21,9 @@ WriteMakefile
  },
  DISTNAME  => 'Business-Cart-Generic',
  NAME      => 'Business::Cart::Generic',
- PL_FILES  => {},
+# Next line runs copy.config.pl when user runs 'make'.
+# Warning: '...' => 0 is OK but => '' or undef are ignored.
+ PL_FILES  => {'scripts/copy.config.pl' => 'Copying...'},
  PREREQ_PM =>
  {
  	 CGI                         => 3.52,
@@ -36,7 +38,6 @@ WriteMakefile
  	 File::HomeDir               => 0.97,
 	 FindBin                     => 1.50,
 	 IO::File                    => 1.14,
-	 IO::Scalar                  => 2.110,
  	 JSON::XS                    => 2.3,
 	 Lingua::EN::Inflect::Number => 1.1,
  	 Log::Handler::Output::DBI   => 0.11,

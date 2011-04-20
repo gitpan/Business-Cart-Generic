@@ -1,4 +1,15 @@
 Revision history for Perl extension Business::Cart::Generic.
 
+0.81  Tue Apr 12 11:07:00 2011
+	- Add use strict/warnings to various modules.
+	- Rename Change.ini to Changelog.ini.
+	- Rename output of scripts/export.orders.as.html.pl from order.html to orders.html.
+	- Clean up handing of HTML border option in templates.
+	- Fix drop table code to not log drop of log table.
+	- Remove redundant references to IO::Scalar.
+	- Make Build.PL and Makefile.PL run scripts/copy.config.pl.
+	- Expand docs to discuss config/.htbusiness.cart.generic.conf, and scripts/copy.config.pl.
+	  This section was missing from the docs in V 0.80.
+
 0.80  Sun Apr  3 14:04:41 2011
-	  - Original version
+	- Original version

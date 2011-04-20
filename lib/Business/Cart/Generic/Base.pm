@@ -1,5 +1,8 @@
 package Business::Cart::Generic::Base;
 
+use strict;
+use warnings;
+
 use Business::Cart::Generic::Util::Config;
 use Business::Cart::Generic::Util::Logger;
 
@@ -31,7 +34,7 @@ has logger =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 # -----------------------------------------------
 

@@ -1,5 +1,8 @@
 package Business::Cart::Generic::Database::Create;
 
+use strict;
+use warnings;
+
 use DBIx::Admin::CreateTable;
 
 use Moose;
@@ -31,7 +34,7 @@ has time_option =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 # -----------------------------------------------
 
@@ -1175,7 +1178,11 @@ sub drop_table
 	my($self, $table_name) = @_;
 
 	$self -> creator -> drop_table($table_name);
-	$self -> inform($table_name, 'dropped');
+
+	if ($table_name ne 'log')
+	{
+		$self -> inform($table_name, 'dropped');
+	}
 
 } # End of drop_table.
 

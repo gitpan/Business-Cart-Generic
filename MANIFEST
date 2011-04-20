@@ -1,5 +1,5 @@
 Build.PL
-Change.ini
+Changelog.ini
 CHANGES
 config/.htbusiness.cart.generic.conf
 data/countries.csv

@@ -1,5 +1,8 @@
 package Business::Cart::Generic::Util::Config;
 
+use strict;
+use warnings;
+
 use Config::Tiny;
 
 use File::HomeDir;
@@ -14,7 +17,7 @@ has section          => (is => 'rw', isa => 'Str', required => 0);
 
 use namespace::autoclean;
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 # -----------------------------------------------
 

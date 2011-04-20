@@ -6,7 +6,7 @@ use warnings;
 
 use Text::Xslate 'mark_raw';
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 # -----------------------------------------------
 

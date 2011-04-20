@@ -1,5 +1,8 @@
 package Business::Cart::Generic::Database::Loader;
 
+use strict;
+use warnings;
+
 use CGI;
 
 use FindBin;
@@ -7,7 +10,6 @@ use FindBin;
 use Business::Cart::Generic::Database;
 
 use IO::File;
-use IO::Scalar;
 
 use Moose;
 
@@ -22,7 +24,7 @@ extends 'Business::Cart::Generic::Database::Base';
 
 use namespace::autoclean;
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 # -----------------------------------------------
 

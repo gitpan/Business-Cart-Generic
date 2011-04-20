@@ -1,5 +1,8 @@
 package Business::Cart::Generic::Database::Export;
 
+use strict;
+use warnings;
+
 use CGI;
 
 use Business::Cart::Generic::Database;
@@ -37,7 +40,7 @@ has tx =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 # -----------------------------------------------
 
@@ -96,8 +99,9 @@ sub orders_as_html
 			(
 			 'order.page.tx',
 			 {
-				 id  => $id,
-				 row => $self -> view -> order -> format_order($order),
+				 border => 0,
+				 id     => $id,
+				 row    => $self -> view -> order -> format_order($order),
 			 }
 			);
 		close OUT;
@@ -105,13 +109,14 @@ sub orders_as_html
 		print "Saved $page_name. \n";
 	}
 
-	$page_name{0} = file($order_path, "order.html");
+	$page_name{0} = file($order_path, "orders.html");
 
 	open(OUT, '>', $page_name{0}) || die "Can't open($page_name{0}): $!";
 	print OUT $self -> tx -> render
 		(
 		 'order.index.page.tx',
 		 {
+			 borders => 1,
 			 css_url => $$config{css_url},
 			 row     => [map{[{td => mark_raw(qq|<a href="$order_url/$page_name{$_}">Order # $_</a>|)}]} sort grep{! /^0$/} keys %page_name],
 		 }

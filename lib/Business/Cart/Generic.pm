@@ -1,6 +1,6 @@
 package Business::Cart::Generic;
 
-our $VERSION = '0.80';
+our $VERSION = '0.81';
 
 1;
 
@@ -8,7 +8,7 @@ our $VERSION = '0.80';
 
 =head1 NAME
 
-L<Business::Cart::Generic> - Basic shopping cart. So far, the GUI only supports searching for orders
+L<Business::Cart::Generic> - Basic shopping cart. The GUI only supports searching for orders
 
 =head1 Synopsis
 
@@ -70,6 +70,39 @@ or:
 	make (or dmake or nmake)
 	make test
 	make install
+
+=head2 The Configuration File
+
+Next, tell L<Business::Cart::Generic> your values for some options.
+
+For that, see config/.htbusiness.cart.generic.conf.
+
+If you are using Build.PL, running Build (without parameters) will run scripts/copy.config.pl,
+as explained next.
+
+If you are using Makefile.PL, running make (without parameters) will also run scripts/copy.config.pl.
+
+Either way, before editing the config file, ensure you run scripts/copy.config.pl. It will copy
+the config file using L<File::HomeDir>, to a directory where the run-time code in
+L<Business::Cart::Generic> will look for it.
+
+	shell>cd Business-Cart-Generic-1.00
+	shell>perl scripts/copy.config.pl
+
+Under Debian, this directory will be $HOME/.perl/Benchmark-Featureset-LocaleCountry/. When you
+run copy.config.pl, it will report where it has copied the config file to.
+
+Check the docs for L<File::HomeDir> to see what your operating system returns for a
+call to my_dist_config().
+
+The point of this is that after the module is installed, the config file will be
+easily accessible and editable without needing permission to write to the directory
+structure in which modules are stored.
+
+That's why L<File::HomeDir> and L<Path::Class> are pre-requisites for this module.
+
+All modules which ship with their own config file are advised to use the same mechanism
+for storing such files.
 
 =head2 The Yahoo User Interface (YUI)
 
@@ -391,7 +424,7 @@ L<Text::Xslate>.
 
 =item o What is the database schema?
 
-It is shipped in data/generic.cart.png, which is output by scripts/plot.schema.sh.
+See L<generic.cart.png|http://savage.net.au/Perl-modules/generic.cart.png>, which was output by scripts/plot.schema.sh.
 
 The code to create the tables is in L<Business::Cart::Generic::Database::Create>.
 

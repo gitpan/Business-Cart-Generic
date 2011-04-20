@@ -3,9 +3,10 @@
 use strict;
 use warnings;
 
-use Business::Cart::Generic::Util::Config;
-
 use File::Copy;
+use File::HomeDir;
+
+use Path::Class;
 
 # ----------------------------------------
 

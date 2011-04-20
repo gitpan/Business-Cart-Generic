@@ -12,7 +12,7 @@
 
 <h3 class="blue_center">Orders</h3>
 
-: include "basic.table.tx" {row => $row};
+: include "basic.table.tx" {border => $border, row => $row};
 
 </body>
 
