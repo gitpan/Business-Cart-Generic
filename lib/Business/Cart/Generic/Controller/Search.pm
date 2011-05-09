@@ -6,7 +6,7 @@ use warnings;
 
 # We don't use Moose because we isa CGI::Application.
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 
@@ -18,10 +18,20 @@ sub display
 
 	# search($name) returns an arrayref of hashrefs.
 
-	my($number) = $self -> query -> param('search_number') || '';
-	my($order)  = $self -> param('db') -> search -> find($number);
-	$order      = $order ? $self -> param('db') -> order -> inflate_order($order) : '';
-	$order      = $order ? $self -> param('view') -> order -> format_order($order) : '';
+	my($number) = $self -> query -> param('search_number');
+
+	my($order);
+
+	if ($number && ($number =~ /^\d+$/) )
+	{
+		$order = $self -> param('db') -> search -> find($number);
+		$order = $order ? $self -> param('db') -> order -> inflate_order($order) : '';
+		$order = $order ? $self -> param('view') -> order -> format_search_order($order) : '';
+	}
+	else
+	{
+		$number = 0;
+	}
 
 	return $self -> param('view') -> search -> display($number, $order);
 

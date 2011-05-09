@@ -40,7 +40,7 @@ has tx =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 
@@ -97,11 +97,11 @@ sub orders_as_html
 		open(OUT, '>', $page_name) || die "Can't open($page_name): $!";
 		print OUT $self -> tx -> render
 			(
-			 'order.page.tx',
+			 'export.order.page.tx',
 			 {
 				 border => 0,
 				 id     => $id,
-				 row    => $self -> view -> order -> format_order($order),
+				 row    => $self -> view -> order -> format_search_order($order),
 			 }
 			);
 		close OUT;
@@ -114,7 +114,7 @@ sub orders_as_html
 	open(OUT, '>', $page_name{0}) || die "Can't open($page_name{0}): $!";
 	print OUT $self -> tx -> render
 		(
-		 'order.index.page.tx',
+		 'export.order.index.page.tx',
 		 {
 			 borders => 1,
 			 css_url => $$config{css_url},

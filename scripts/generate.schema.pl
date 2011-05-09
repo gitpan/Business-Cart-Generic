@@ -15,7 +15,8 @@ make_schema_at
 (
 	'Business::Cart::Generic::Schema',
 	{
-		dump_directory => './lib',
+		dump_directory     => './lib',
+		skip_load_external => 1,
 	},
 	[
 		$$config{dsn}, $$config{username}, $$config{password},

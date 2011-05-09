@@ -22,7 +22,7 @@ has logger =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 

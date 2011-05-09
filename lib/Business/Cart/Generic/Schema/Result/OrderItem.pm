@@ -61,7 +61,7 @@ __PACKAGE__->table("order_items");
   data_type: 'integer'
   is_nullable: 0
 
-=head2 tax
+=head2 tax_rate
 
   data_type: 'numeric'
   is_nullable: 1
@@ -95,7 +95,7 @@ __PACKAGE__->add_columns(
   { data_type => "numeric", is_nullable => 0, size => [15, 4] },
   "quantity",
   { data_type => "integer", is_nullable => 0 },
-  "tax",
+  "tax_rate",
   { data_type => "numeric", is_nullable => 1, size => [7, 4] },
   "upper_name",
   { data_type => "varchar", is_nullable => 0, size => 255 },
@@ -135,8 +135,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-04-10 14:05:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:heyC/V2OHkHWCWZmzJ0Yhg
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-09 11:58:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JD6ObIE78s8n+bAFJt+gkA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

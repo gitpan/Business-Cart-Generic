@@ -7,4 +7,4 @@ use Business::Cart::Generic::Database::Loader;
 
 # ----------------------------
 
-Business::Cart::Generic::Database::Loader -> new -> place_orders;
+Business::Cart::Generic::Database::Loader -> new -> import_products;

@@ -11,7 +11,7 @@ extends 'Business::Cart::Generic::View::Base';
 
 use namespace::autoclean;
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 
@@ -63,7 +63,7 @@ sub display
 
 	if (! $order)
 	{
-		$order = ["No order matches # '$number'"];
+		$order = [ [{td => "No order matches # '$number'"}] ];
 	}
 
 	return $self -> templater -> render

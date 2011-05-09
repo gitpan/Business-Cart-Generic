@@ -11,6 +11,8 @@ use Business::Cart::Generic::Database;
 
 use IO::File;
 
+use Locale::SubCountry;
+
 use Moose;
 
 use Perl6::Slurp;
@@ -24,7 +26,7 @@ extends 'Business::Cart::Generic::Database::Base';
 
 use namespace::autoclean;
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 
@@ -36,7 +38,8 @@ sub BUILD
 		(
 		 Business::Cart::Generic::Database -> new
 		 (
-		  query => CGI -> new,
+		  online => 0,
+		  query  => CGI -> new,
 		 )
 		);
 
@@ -353,11 +356,29 @@ sub populate_tables
 sub populate_countries_table
 {
 	my($self)    = @_;
-	my($path)    = "$FindBin::Bin/../data/countries.csv";
-	my($country) = $self -> read_csv_file($path);
 	my($rs)      = $self -> schema -> resultset('Country');
+	my($world)   = Locale::SubCountry::World -> new;
+	my(%country) = $world -> code_full_name_hash;
 
 	my($result);
+
+	for my $code (sort keys %country)
+	{
+		$result = $rs -> create
+			({
+			 code       => $code,
+			 name       => $country{$code},
+			 upper_name => uc $country{$code},
+			});
+	}
+
+=pop
+
+	Change *::Database::Create.create_countries_table() before activating this code.
+	See also populate_zones_table() below, and default_country_id etc in the config file.
+
+	my($path)    = "$FindBin::Bin/../data/countries.csv";
+	my($country) = $self -> read_csv_file($path);
 
 	for my $line (@$country)
 	{
@@ -370,6 +391,8 @@ sub populate_countries_table
 			 upper_name     => uc $$line{name},
 			});
 	}
+
+=cut
 
 } # End of populate_countries_table.
 
@@ -572,12 +595,51 @@ sub populate_weight_classes_table
 
 sub populate_zones_table
 {
-	my($self) = @_;
+	my($self)    = @_;
+	my($rs)      = $self -> schema -> resultset('Zone');
+	my(@country) = $self -> schema -> resultset('Country') -> search({}, {columns => [qw/id name/]});
+
+	my($country, $code, %code2hash);
+	my($locale);
+	my($result);
+
+	for $country (@country)
+	{
+		$locale = Locale::SubCountry -> new($country -> name);
+
+		if ($locale -> has_sub_countries)
+		{
+			%code2hash = $locale -> code_full_name_hash;
+
+			for $code (sort keys %code2hash)
+			{
+				$result = $rs -> create
+					({
+						code       => $code,
+						country_id => $country -> id,
+						name       => $code2hash{$code},
+						upper_name => uc $code2hash{$code},
+					 });
+			}
+		}
+		else
+		{
+			$result = $rs -> create
+				({
+					code       => '-',
+					country_id => $country -> id,
+					name       => 'No zones',
+					upper_name => uc 'No zones',
+				 });
+		}
+	}
+
+=pod
+
+	See also populate_countries_table() above.
+
 	my($path) = "$FindBin::Bin/../data/zones.csv";
 	my($zone) = $self -> read_csv_file($path);
-	my($rs)   = $self -> schema -> resultset('Zone');
-
-	my($result);
 
 	for my $line (@$zone)
 	{
@@ -589,6 +651,8 @@ sub populate_zones_table
 			 upper_name => uc $$line{name},
 			});
 	}
+
+=cut
 
 } # End of populate_zones_table.
 

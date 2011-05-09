@@ -6,7 +6,7 @@ use warnings;
 
 use Text::Xslate 'mark_raw';
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 
@@ -42,7 +42,7 @@ sub build_head_init
 	$self -> log(debug => 'build_head_init()');
 
 	my($about_html)  = $self -> build_about_html;
-	my($add_html)    = $self -> param('view') -> add -> build_add_html;
+	my($order_html)  = $self -> param('view') -> order -> build_order_html;
 	my($search_html) = $self -> param('view') -> search -> build_search_html;
 	my($head_init)   = <<EJS;
 
@@ -59,8 +59,8 @@ YUI().use('node-base', 'tabview', function(Y)
 				   content: '$search_html'
 				 },
 				 {
-				   label:   'Add',
-				   content: 'Not implemented'
+				   label:   'Order',
+				   content: '$order_html'
 				 },
 				 {
 				   label:   'About',
@@ -79,14 +79,14 @@ YUI().use('node-base', 'tabview', function(Y)
 				 {
 					 make_search_number_focus();
 				 }
-				 else if (label === "Add")
+				 else if (label === "Order")
 				 {
-					 make_add_name_focus();
+					 make_quantity_focus();
 				 }
 			 }
 			);
 		make_search_number_focus();
-		//prepare_add_form();
+		prepare_order_form();
 		prepare_search_form();
 	}
 
@@ -108,7 +108,7 @@ sub build_head_js
 	$self -> log(debug => 'build_head_js()');
 
 	my($view_js) =
-#		$self -> param('view') -> add -> build_head_js .
+		$self -> param('view') -> order -> build_head_js .
 		$self -> param('view') -> search -> build_head_js;
 
 	# These things are being declared within the web page's head.
@@ -123,9 +123,9 @@ function make_search_number_focus(eve)
 	document.search_form.search_number.focus();
 }
 
-function make_add_name_focus(eve)
+function make_quantity_focus(eve)
 {
-	//document.add_form.add_name.focus();
+	document.order_form.quantity.focus();
 }
 
 EJS

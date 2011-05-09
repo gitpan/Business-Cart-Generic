@@ -17,7 +17,7 @@ has section          => (is => 'rw', isa => 'Str', required => 0);
 
 use namespace::autoclean;
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 

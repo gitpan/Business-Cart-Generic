@@ -26,7 +26,7 @@ has schema =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 
@@ -40,19 +40,6 @@ sub BUILD
 		);
 
 } # End of BUILD.
-
-# -----------------------------------------------
-
-sub format_amount
-{
-	my($self, $amount, $currency) = @_;
-	my($decimal_places) = $currency -> decimal_places;
-	my($symbol_left)    = $currency -> symbol_left;
-	my($format)         = sprintf('%s%%.%sf', $symbol_left, $decimal_places);
-
-	return sprintf($format, $amount),
-
-} # End of format_amount.
 
 # -----------------------------------------------
 

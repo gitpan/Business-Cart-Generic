@@ -24,7 +24,7 @@ extends 'Business::Cart::Generic::Database::Base';
 
 use namespace::autoclean;
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 
@@ -36,7 +36,8 @@ sub BUILD
 		(
 		 Business::Cart::Generic::Database -> new
 		 (
-		  query => CGI -> new,
+		  online => 0,
+		  query  => CGI -> new,
 		 )
 		);
 
@@ -90,7 +91,7 @@ sub generate_description
 
 # -----------------------------------------------
 
-sub populate_all_tables
+sub import_products
 {
 	my($self) = @_;
 
@@ -99,7 +100,17 @@ sub populate_all_tables
 		 fixup => sub{ $self -> populate_tables }, catch{ defined $_ ? die $_ : ''}
 		);
 
-}	# End of populate_all_tables.
+}	# End of import_products.
+
+# -----------------------------------------------
+
+sub place_orders
+{
+	my($self) = @_;
+
+	$self -> populate_orders_table;
+
+}	# End of place_orders.
 
 # -----------------------------------------------
 
@@ -118,14 +129,6 @@ sub populate_tables
 	$self -> populate_table('product.styles.csv', 'ProductStyle');
 	$self -> populate_table('product.types.csv', 'ProductType');
 	$self -> populate_products_table;
-	$self -> populate_orders_table;
-
-	# Remove temporary tables.
-
-	for (qw/product_classes product_colors product_sizes product_styles product_types/)
-	{
-		$self -> connector -> dbh -> do("drop table $_");
-	}
 
 }	# End of populate_tables.
 
@@ -235,35 +238,40 @@ sub populate_order_items_table
 	my($path)         = "$FindBin::Bin/../data/order.items.csv";
 	my($order)        = $self -> read_csv_file($path);
 	my($rs)           = $self -> schema -> resultset('OrderItem');
+	my(@country2id)   = $self -> schema -> resultset('Country') -> search({}, {columns => [qw/name id/]});
+	my(%country2id)   = map{($_ -> name, $_ -> id)} @country2id;
 	my(@product2id)   = $self -> schema -> resultset('Product') -> search({}, {columns => [qw/name id/]});
 	my(%product2id)   = map{($_ -> name, $_ -> id)} @product2id;
 	my(@tax_class2id) = $self -> schema -> resultset('TaxClass') -> search({}, {columns => [qw/name id/]});
 	my(%tax_class2id) = map{($_ -> name, $_ -> id)} @tax_class2id;
-	my(@zone2id)      = $self -> schema -> resultset('Zone') -> search({}, {columns => [qw/code id/]});
-	my(%zone2id)      = map{($_ -> code, $_ -> id)} @zone2id;
 
-	my($product_id, $product);
+	my($country_id);
+	my($product_id, $product, $product_name);
 	my($result);
 	my($tax_class_id, $tax_rate);
-	my($zone_id);
+	my(@zone2id, %zone2id, $zone_id);
 
 	for my $line (@$order)
 	{
-		$product_id   = $product2id{$$line{product} }     || die "Unknown product: $$line{product}";
-		$tax_class_id = $tax_class2id{$$line{tax_class} } || die "Unknown tax class: $$line{tax_class}";
+		$country_id   = $country2id{$$line{country} }     || die "Unknown country: $$line{country}";
+		@zone2id      = $self -> schema -> resultset('Zone') -> search({country_id => $country_id}, {columns => [qw/code id/]});
+		%zone2id      = map{($_ -> code, $_ -> id)} @zone2id;
 		$zone_id      = $zone2id{$$line{zone} }           || die "Unknown zone: $$line{zone}";
+		$product_id   = $product2id{$$line{name} }        || die "Unknown name: $$line{name}";
+		$tax_class_id = $tax_class2id{$$line{tax_class} } || die "Unknown tax class: $$line{tax_class}";
 		$product      = $self -> schema -> resultset('Product') -> search({id => $product_id}, {}) -> single;
+		$product_name = $product -> name;
 		$tax_rate     = $self -> schema -> resultset('TaxRate') -> search({tax_class_id => $tax_class_id, zone_id => $zone_id}, {}) -> single;
 		$result       = $rs -> create
 			({
-				model      => $$line{model},
-				name       => $$line{name},
+				model      => $product -> model,
+				name       => $product_name,
 				order_id   => $order_id,
 				price      => $product -> price,
 				product_id => $product_id,
 				quantity   => $$line{quantity},
-				tax        => $tax_rate -> rate * $product -> price,
-				upper_name => uc $$line{name},
+				tax_rate   => $tax_rate -> rate,
+				upper_name => uc $product_name,
 			});
 
 		$product -> quantity_on_hand($product -> quantity_on_hand - $$line{quantity});
@@ -382,6 +390,7 @@ sub populate_products_table
 	my($description);
 	my($manufacturer_id);
 	my($name);
+	my(@product);
 	my($result);
 	my($size_id, $status_id, $style_id);
 	my($tax_id, $type_id);
@@ -410,11 +419,11 @@ sub populate_products_table
 				 description       => $description,
 				 has_children      => 'No',                
 				 manufacturer_id   => $manufacturer_id,
-				 model             => sprintf('SKU-%02i', ++$count), # TODO.
+				 model             => sprintf('SKU-%04i', ++$count), # TODO.
 				 name              => $name,
 				 parent_id         => 0,
 				 price             => $$line{price},
-				 quantity_on_hand  => 100, # TODO.
+				 quantity_on_hand  => $$line{quantity},
 				 quantity_ordered  => 0,   # TODO.
 				 product_status_id => $status_id,
 				 tax_class_id      => $tax_id,
@@ -435,8 +444,8 @@ sub populate_street_addresses_table
 	my($path)       = "$FindBin::Bin/../data/street.addresses.csv";
 	my($address)    = $self -> read_csv_file($path);
 	my($rs)         = $self -> schema -> resultset('StreetAddress');
-	my(@country2id) = $self -> schema -> resultset('Country') -> search({}, {columns => [qw/iso3_code id/]});
-	my(%country2id) = map{($_ -> iso3_code, $_ -> id)} @country2id;
+	my(@country2id) = $self -> schema -> resultset('Country') -> search({}, {columns => [qw/name id/]});
+	my(%country2id) = map{($_ -> name, $_ -> id)} @country2id;
 	my(@zone2id)    = $self -> schema -> resultset('Zone') -> search({}, {columns => [qw/code id/]});
 	my(%zone2id)    = map{($_ -> code, $_ -> id)} @zone2id;
 
@@ -495,17 +504,21 @@ sub populate_tax_rates_table
 	my($path)         = "$FindBin::Bin/../data/tax.rates.csv";
 	my($rate)         = $self -> read_csv_file($path);
 	my($rs)           = $self -> schema -> resultset('TaxRate');
+	my(@country2id)   = $self -> schema -> resultset('Country') -> search({}, {columns => [qw/name id/]});
+	my(%country2id)   = map{($_ -> name, $_ -> id)} @country2id;
 	my(@tax_class2id) = $self -> schema -> resultset('TaxClass') -> search({}, {columns => [qw/name id/]});
 	my(%tax_class2id) = map{($_ -> name, $_ -> id)} @tax_class2id;
-	my(@zone2id)      = $self -> schema -> resultset('Zone') -> search({}, {columns => [qw/code id/]});
-	my(%zone2id)      = map{($_ -> code, $_ -> id)} @zone2id;
 
+	my($country_id);
 	my($result);
 	my($tax_class_id);
-	my($zone_id);
+	my(@zone2id, %zone2id, $zone_id);
 
 	for my $line (@$rate)
 	{
+		$country_id   = $country2id{$$line{country} }     || die "Unknown country: $$line{country}";
+		@zone2id      = $self -> schema -> resultset('Zone') -> search({country_id => $country_id}, {columns => [qw/code id/]});
+		%zone2id      = map{($_ -> code, $_ -> id)} @zone2id;
 		$tax_class_id = $tax_class2id{$$line{tax_class} } || die "Unknown tax class: $$line{tax_class}";
 		$zone_id      = $zone2id{$$line{zone} }           || die "Unknown zone: $$line{zone}";
 		$result       = $rs -> create

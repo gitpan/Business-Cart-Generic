@@ -26,23 +26,11 @@ __PACKAGE__->table("countries");
   is_nullable: 0
   sequence: 'countries_id_seq'
 
-=head2 address_format
+=head2 code
 
   data_type: 'varchar'
   is_nullable: 0
   size: 255
-
-=head2 iso2_code
-
-  data_type: 'char'
-  is_nullable: 0
-  size: 2
-
-=head2 iso3_code
-
-  data_type: 'char'
-  is_nullable: 0
-  size: 3
 
 =head2 name
 
@@ -66,12 +54,8 @@ __PACKAGE__->add_columns(
     is_nullable       => 0,
     sequence          => "countries_id_seq",
   },
-  "address_format",
+  "code",
   { data_type => "varchar", is_nullable => 0, size => 255 },
-  "iso2_code",
-  { data_type => "char", is_nullable => 0, size => 2 },
-  "iso3_code",
-  { data_type => "char", is_nullable => 0, size => 3 },
   "name",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "upper_name",
@@ -112,8 +96,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-04-10 14:05:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3BwnQcksRc6yp+Ab/sgr8w
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2011-05-09 11:58:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1+nOc2FsWJx9rlPkghPhhA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

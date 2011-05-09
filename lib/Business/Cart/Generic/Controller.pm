@@ -13,7 +13,7 @@ use Text::Xslate;
 
 # We don't use Moose because we ias CGI::Application.
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 
@@ -49,7 +49,8 @@ sub cgiapp_prerun
 		(
 		 db => Business::Cart::Generic::Database -> new
 		 (
-		  query => $q,
+		  logger => $self -> param('logger'),
+		  query  => $q,
 		 )
 		);
 
@@ -66,6 +67,7 @@ sub cgiapp_prerun
 		(
 		 view => Business::Cart::Generic::View -> new
 		 (
+		  config    => $self -> param('config'),
 		  db        => $self -> param('db'),
 		  templater => $self -> param('templater'),
 		 )

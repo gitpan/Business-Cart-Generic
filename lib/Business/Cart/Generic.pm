@@ -1,6 +1,6 @@
 package Business::Cart::Generic;
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 1;
 
@@ -8,11 +8,14 @@ our $VERSION = '0.81';
 
 =head1 NAME
 
-L<Business::Cart::Generic> - Basic shopping cart. The GUI only supports searching for orders
+L<Business::Cart::Generic> - Basic shopping cart
 
 =head1 Synopsis
 
 Convert parts of L<osCommerce|http://www.oscommerce.com/> and L<PrestaShop|http://prestashop.com> into Perl.
+
+See httpd/cgi-bin/generic.cart.psgi and httpd/cgi-bin/generic.cart.cgi, or import.products.pl and place.orders.pl.
+
 
 =head1 Description
 
@@ -22,11 +25,11 @@ L<Business::Cart::Generic> implements parts of osCommerce and PrestaShop in Perl
 
 =item o Placing orders
 
-See scripts/place.orders.pl.
+Use the GUI, or see import.products.pl and place.orders.pl.
 
 =item o Outputting orders as HTML files
 
-See scripts/export.orders.as.html.pl.
+See export.orders.as.html.pl.
 
 =item o Outputting orders as HTML via the GUI
 
@@ -89,7 +92,7 @@ L<Business::Cart::Generic> will look for it.
 	shell>cd Business-Cart-Generic-1.00
 	shell>perl scripts/copy.config.pl
 
-Under Debian, this directory will be $HOME/.perl/Benchmark-Featureset-LocaleCountry/. When you
+Under Debian, this directory will be $HOME/.perl/Business-Cart-Generic/. When you
 run copy.config.pl, it will report where it has copied the config file to.
 
 Check the docs for L<File::HomeDir> to see what your operating system returns for a
@@ -259,9 +262,10 @@ populates tables which are independent of any manufacturer, product or customer.
 
 Up to this point, there are no products in the database, which means orders can't be placed.
 
+	shell>perl scripts/import.products.pl
 	shell>perl scripts/place.orders.pl
 
-place.orders.pl uses Business::Cart::Generic::Database::Loader.
+These 2 scripts use Business::Cart::Generic::Database::Loader.
 
 This tells you what you need to fabricate to place an order. This code has been
 deliberately separated from Database::Import, since it (Loader) populates tables
@@ -397,7 +401,7 @@ Search the source code tree for 'TODO' to see things which need to be cleaned up
 
 =item o What is the main purpose of this module?
 
-To store orders sent from another system. Hence the lack of a GUI (so far).
+To store orders sent from another system.
 
 =item o What parts of osCommerce have you implemented?
 
@@ -410,8 +414,6 @@ PrestaShop has influenced the database table design.
 =item o What web interface are you using?
 
 A home-grown one, written using L<YUI3|http://developer.yahoo.com/yui/3/>.
-
-It is minimalistic.
 
 =item o What L<Object-Relational Mapping|http://en.wikipedia.org/wiki/Object-relational_mapping>
 (ORM) are you using?
@@ -428,9 +430,70 @@ See L<generic.cart.png|http://savage.net.au/Perl-modules/generic.cart.png>, whic
 
 The code to create the tables is in L<Business::Cart::Generic::Database::Create>.
 
+=item o How are transactions handled?
+
+I use L<DBIx::Connector>'s txn feature.
+
+=item o Do you use table or row locks to support multiple, simultaneous users?
+
+No, not yet.
+
+=item o How are prices and taxes stored in the order_items table?
+
+The order_items tables holds (among other things):
+
+=over 4
+
+=item o price
+
+This is copied from the products table.
+
+=item o quantity
+
+This is copied from the user's input.
+
+=item o tax_rate
+
+This is copied from the tax_rates table.
+
+=back
+
+On other words, no calculations are done when items are ordered. Calculations are only done when data is output.
+
+=item o What does the Checkout button actually do?
+
+=over 4
+
+=item o It updates the quantity on hand and quantity ordered for each product
+
+=item o It sets the order's status to 'Checked out'
+
+=item o It sets the order's date of completion and date of modification to SQL's 'now()'
+
+=item o It adds an order history item with a status of 'Checked out'
+
+=back
+
+=item o What is stored in the session?
+
+The session currenctly holds 1 parameter, a hashref called order, which contains these keys:
+
+=over 4
+
+=item o id: The id (primary key) in the orders table
+
+=item o item_count: The number of items in the cart
+
+=item o item_id: The id (primary key) in the order_items table of the last item added to the cart
+
+=item o order_count: The number of times the user has clicked the Checkout button
+
+=back
+
 =item o How do I see how things work?
 
-Trace the logic in script/place.orders.pl and scripts/export.orders.as.html.pl.
+Trace the logic in Business::Cart::Generic::Controller::Order, where online orders are handled, or
+trace the logic in import.products.pl, place.orders.pl and export.orders.as.html.pl.
 
 Once you've run place.orders.pl you can use this module's GUI to search for orders by order number.
 
@@ -464,6 +527,33 @@ Various tables have a date_modified column, but there is no code which updates i
 
 =back
 
+=item o The Enter key does not work on the quantity field for online orders!
+
+Correct. I disabled it. What happened was that it worked until I displayed items in the shopping cart,
+which included [Remove from cart] buttons. After that, the most recently added button responded to the
+Enter key, even though the cursor was in the quantity field. Messy, and v-e-r-y confusing.
+
+=item o Help! I changed something and now the tabs don't appear upon start-up!
+
+I believe you... The most likely explanations are:
+
+=over 4
+
+=item o You made a mistake. Fix it :-)
+
+=item o You changed the default country to Cote D'Ivoire
+
+See that single quote? You can't default to a country name containing a single quote, because of the code in
+Business::Cart::Generic::Controller::Initialize.build_head_init(). There's a call in that method to
+build_order_html(), after which the order form's HTML is put into a single-quoted Javascript string, for
+placement onto the Order tab. Sorry. Luckily, there is only one such country.
+
+=item o You changed the default country to one with a zone name containing a single quote
+
+See previous item for details.
+
+=back
+
 =back
 
 =head1 Machine-Readable Change Log
@@ -476,7 +566,7 @@ Version numbers < 1.00 represent development versions. From 1.00 up, they are pr
 
 =head1 Thanks
 
-Many thanks are due to the people who chose to make osCommerce and PrestaShop, etc, Open Source.
+Many thanks are due to the people who chose to make osCommerce and PrestaShop, Zen Cart, etc, Open Source.
 
 =head1 Support
 

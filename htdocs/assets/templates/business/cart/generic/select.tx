@@ -1,4 +1,4 @@
-<select name="<: $name :>" id="<: $name :>" <: $on_change :>>
+<select name="<: $name :>" id="<: $name :>" <: $onchange :>>
 : for $loop -> $item {
 <option value="<: $item.value :>"
 : if $item.default == "1" {

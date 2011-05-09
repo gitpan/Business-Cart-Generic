@@ -34,7 +34,7 @@ has time_option =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.81';
+our $VERSION = '0.82';
 
 # -----------------------------------------------
 
@@ -201,6 +201,20 @@ sub create_countries_table
 create table $table_name
 (
 id $primary_key,
+code varchar(255) not null,
+name varchar(255) not null,
+upper_name varchar(255) not null
+) $engine
+SQL
+
+=pod
+
+	See *::Database::Import.populate_countries_table().
+
+	my($result)      = $self -> creator -> create_table(<<SQL);
+create table $table_name
+(
+id $primary_key,
 address_format varchar(255) not null,
 iso2_code char(2) not null,
 iso3_code char(3) not null,
@@ -208,6 +222,9 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
+
+=cut
+
 	$self -> inform($table_name, 'created', $result);
 
 } # End of create_countries_table.
@@ -427,6 +444,7 @@ sub create_log_table
 	my($self)        = @_;
 	my($table_name)  = 'log';
 	my($primary_key) = $self -> creator -> generate_primary_key_sql($table_name);
+	my($type)        = $self -> creator -> db_vendor eq 'ORACLE' ? 'long' : 'text';
 	my($engine)      = $self -> engine;
 	my($time_option) = $self -> time_option;
 	my($result)      = $self -> creator -> create_table(<<SQL);
@@ -434,7 +452,7 @@ create table $table_name
 (
 id $primary_key,
 level varchar(255) not null,
-message varchar(255) not null,
+message $type not null,
 timestamp timestamp $time_option not null default current_timestamp
 ) $engine
 SQL
@@ -556,7 +574,7 @@ model varchar(255) not null,
 name varchar(255) not null,
 price decimal(15,4) not null,
 quantity integer not null,
-tax decimal(7,4),
+tax_rate decimal(7,4),
 upper_name varchar(255) not null
 ) $engine
 SQL
