@@ -6,7 +6,7 @@ use warnings;
 
 use Text::Xslate 'mark_raw';
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 # -----------------------------------------------
 
@@ -162,3 +162,89 @@ sub display
 # -----------------------------------------------
 
 1;
+
+=pod
+
+=head1 NAME
+
+L<Business::Cart::Generic::Controller::Initialize> - Basic shopping cart
+
+=head1 Synopsis
+
+See L<Business::Cart::Generic>.
+
+=head1 Description
+
+L<Business::Cart::Generic> implements parts of osCommerce and PrestaShop in Perl.
+
+=head1 Installation
+
+See L<Business::Cart::Generic>.
+
+=head1 Constructor and Initialization
+
+=head2 Parentage
+
+This is a sub-class of L<Business::Cart::Generic::Controller>.
+
+=head2 Using new()
+
+This class is never used stand-alone. However, its run mode 'display' is run automatically when the user hits the
+default PSGI or CGI script URL, e.g. http://127.0.0.1:5008/.
+
+=head1 Methods
+
+=head2 build_about_html()
+
+Returns the string of HTML used in the About tab.
+
+=head2 build_head_init()
+
+Returns a string of HTML and Javascript used in the tabset.
+
+=head2 build_head_js()
+
+Returns a string of Javascript inserted into the head of the web page.
+
+=head2 display()
+
+Called automatically, since display is the default run mode. See the method cgiapp_prerun() in the parent.
+
+See also the comment above, under L</Constructor and Initialization>.
+
+Returns the default web page to the client.
+
+=head1 Machine-Readable Change Log
+
+The file CHANGES was converted into Changelog.ini by L<Module::Metadata::Changes>.
+
+=head1 Version Numbers
+
+Version numbers < 1.00 represent development versions. From 1.00 up, they are production versions.
+
+=head1 Thanks
+
+Many thanks are due to the people who chose to make osCommerce and PrestaShop, Zen Cart, etc, Open Source.
+
+=head1 Support
+
+Email the author, or log a bug on RT:
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Business::Cart::Generic>.
+
+=head1 Author
+
+L<Business::Cart::Generic> was written by Ron Savage I<E<lt>ron@savage.net.auE<gt>> in 2011.
+
+Home page: L<http://savage.net.au/index.html>.
+
+=head1 Copyright
+
+Australian copyright (c) 2011, Ron Savage.
+
+	All Programs of mine are 'OSI Certified Open Source Software';
+	you can redistribute them and/or modify them under the terms of
+	The Artistic License, a copy of which is available at:
+	http://www.opensource.org/licenses/index.html
+
+=cut

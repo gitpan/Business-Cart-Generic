@@ -9,7 +9,7 @@ extends 'Business::Cart::Generic::Database::Base';
 
 use namespace::autoclean;
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 # --------------------------------------------------
 
@@ -334,3 +334,331 @@ sub save_order_item
 __PACKAGE__ -> meta -> make_immutable;
 
 1;
+
+=pod
+
+=head1 NAME
+
+L<Business::Cart::Generic::Database::Order> - Basic shopping cart
+
+=head1 Synopsis
+
+See L<Business::Cart::Generic>.
+
+=head1 Description
+
+L<Business::Cart::Generic> implements parts of osCommerce and PrestaShop in Perl.
+
+=head1 Installation
+
+See L<Business::Cart::Generic>.
+
+=head1 Constructor and Initialization
+
+=head2 Parentage
+
+This class extends L<Business::Cart::Generic::Database::Base>.
+
+=head2 Using new()
+
+C<new()> is called as C<< my($obj) = Business::Cart::Generic::Database::Order -> new(k1 => v1, k2 => v2, ...) >>.
+
+It returns a new object of type C<Business::Cart::Generic::Database::Order>. See L<Business::Cart::Generic::Database>.
+
+Key-value pairs accepted in the parameter list:
+
+=over 4
+
+=item o db => $db
+
+Takes an object of type L<Business::Cart::Generic::Database>.
+
+This key => value pair is mandatory.
+
+=item o schema => $schema
+
+Takes a L<DBIx::Class> schema object.
+
+This value is provided by the parent, L<Business::Cart::Generic::Database::Base>.
+
+=back
+
+These keys are also getter-type methods.
+
+=head1 Methods
+
+=head2 add_to_cart($order)
+
+Add an item to the cart.
+
+$order is a hashref returned by L<Business::Cart::Generic::Util::Validator>.
+
+Returns the order hashref from the session object.
+
+This latter hashref is discussed in the FAQ in L<Business::Cart::Generic>.
+The code is in L<Business::Cart::Generic::Database/reset_order()>.
+
+=head2 cancel_order()
+
+Cancel the order whose id is in the order hashref in the session object.
+
+Returns nothing.
+
+=head2 checkout()
+
+Wrap up the order by calculating quantities on hand per item, and updating the order history.
+
+Returns nothing.
+
+=head2 get_orders($limit)
+
+Get order item objects from the orders table.
+
+These items are of type L<DBIx::Class::Row>.
+
+Limit defaults to {}, and can be used to get 1 order by - e.g. - setting it to {'me.id' => $order_id}.
+
+The orders table is joined with these tables:
+
+=over 4
+
+=item o The billing_address
+
+I.e. the street_addresses table.
+
+=item o The customers table
+
+=item o The customer_address
+
+I.e. the street_addresses table.
+
+=item o The delivery_address
+
+I.e. the street_addresses table.
+
+=item o The order_statuses table
+
+=item o The payment_methods table
+
+=back
+
+=head2 inflate_order($order)
+
+$order is of type L<DBIx::Class::Row>.
+
+Returns a hashref with these keys:
+
+=over 4
+
+=item o billing_address
+
+This is a hashref with these keys:
+
+=over 4
+
+=item o country_name
+
+=item o locality
+
+=item o street_1
+
+=item o zone_name
+
+=back
+
+The values are all strings.
+
+=item o customer
+
+This is a hashref with these keys:
+
+=over 4
+
+=item o name
+
+=item o title
+
+=back
+
+The values are all strings.
+
+=item o customer_address
+
+This is a hashref with these keys:
+
+=over 4
+
+=item o country_name
+
+=item o locality
+
+=item o street_1
+
+=item o zone_name
+
+=back
+
+The values are all strings.
+
+=item o delivery_address
+
+This is a hashref with these keys:
+
+=over 4
+
+=item o country_name
+
+=item o locality
+
+=item o street_1
+
+=item o zone_name
+
+=back
+
+The values are all strings.
+
+=item o date_added
+
+This is a string like '2011-05-10 10:48:53'.
+
+=item o date_completed
+
+This is a string like '2011-05-10 10:48:53'.
+
+=item o id
+
+This is the order's primary key in the orders table.
+
+=item o item
+
+This is an array ref of item hashrefs, with these keys:
+
+=over 4
+
+=item o currency_id
+
+This is the currency's primary key in the currencies table.
+
+=item o description
+
+This is a string from the products table.
+
+=item o item_id
+
+This is the item's primary key in the items table.
+
+=item o name
+
+This is a string from the products table.
+
+=item o order_id
+
+This is the order's primary key in the orders table.
+
+=item o price
+
+This is a float from the products table.
+
+=item o product_id
+
+This is the product's primary key in the products table.
+
+=item o quantity
+
+This is an integer from the items table.
+
+=item o tax_rate
+
+This is a float from the products table.
+
+=back
+
+=item o order_status
+
+This is a string from the order_statuses table.
+
+=item o payment_method
+
+This is a string from the payment_methods table.
+
+=item o total_price
+
+This is a sum over all items.
+
+=item o total_quantity
+
+This is a sum over all items.
+
+=item o total_tax
+
+This is a sum over all items.
+
+=back
+
+=head2 remove_from_cart($order_id, $item_id)
+
+Remove an item from the cart.
+
+$order_id is the primary key in the orders table.
+
+$item_id is the primary key in the items table.
+
+=head2 save_order($order)
+
+Called by add_to_cart().
+
+$order is a hashref returned by L<Business::Cart::Generic::Util::Validator>.
+
+Returns nothing.
+
+=head2 save_order_history($order)
+
+Called by add_to_cart().
+
+$order is a hashref returned by L<Business::Cart::Generic::Util::Validator>.
+
+Returns nothing.
+
+=head2 save_order_item($order)
+
+Called by add_to_cart().
+
+$order is a hashref returned by L<Business::Cart::Generic::Util::Validator>.
+
+Returns the primary key in the items table of the newly-inserted item.
+
+=head1 Machine-Readable Change Log
+
+The file CHANGES was converted into Changelog.ini by L<Module::Metadata::Changes>.
+
+=head1 Version Numbers
+
+Version numbers < 1.00 represent development versions. From 1.00 up, they are production versions.
+
+=head1 Thanks
+
+Many thanks are due to the people who chose to make osCommerce and PrestaShop, Zen Cart, etc, Open Source.
+
+=head1 Support
+
+Email the author, or log a bug on RT:
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Business::Cart::Generic>.
+
+=head1 Author
+
+L<Business::Cart::Generic> was written by Ron Savage I<E<lt>ron@savage.net.auE<gt>> in 2011.
+
+Home page: L<http://savage.net.au/index.html>.
+
+=head1 Copyright
+
+Australian copyright (c) 2011, Ron Savage.
+
+	All Programs of mine are 'OSI Certified Open Source Software';
+	you can redistribute them and/or modify them under the terms of
+	The Artistic License, a copy of which is available at:
+	http://www.opensource.org/licenses/index.html
+
+=cut

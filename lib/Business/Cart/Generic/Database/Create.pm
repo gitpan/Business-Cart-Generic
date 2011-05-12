@@ -34,7 +34,7 @@ has time_option =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 # -----------------------------------------------
 
@@ -159,7 +159,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_category_descriptions_table.
 
@@ -185,7 +185,7 @@ sort_order integer not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_categories_table.
 
@@ -207,25 +207,7 @@ upper_name varchar(255) not null
 ) $engine
 SQL
 
-=pod
-
-	See *::Database::Import.populate_countries_table().
-
-	my($result)      = $self -> creator -> create_table(<<SQL);
-create table $table_name
-(
-id $primary_key,
-address_format varchar(255) not null,
-iso2_code char(2) not null,
-iso3_code char(3) not null,
-name varchar(255) not null,
-upper_name varchar(255) not null
-) $engine
-SQL
-
-=cut
-
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_countries_table.
 
@@ -245,7 +227,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_customer_statuses_table.
 
@@ -265,7 +247,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_customer_types_table.
 
@@ -299,7 +281,7 @@ upper_name varchar(255) not null,
 username varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_customers_table.
 
@@ -323,7 +305,7 @@ symbol_right varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_currencies_table.
 
@@ -343,7 +325,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_email_address_types_table.
 
@@ -363,7 +345,7 @@ email_address_type_id integer not null references email_address_types(id),
 address varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_email_addresses_table.
 
@@ -383,7 +365,7 @@ customer_id integer not null references customers,
 email_address_id integer not null references email_addresses(id)
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_email_lists_table.
 
@@ -403,7 +385,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_genders_table.
 
@@ -433,7 +415,7 @@ time_format varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_languages_table.
 
@@ -456,7 +438,7 @@ message $type not null,
 timestamp timestamp $time_option not null default current_timestamp
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 }	# End of create_log_table.
 
@@ -478,7 +460,7 @@ date timestamp $time_option not null default current_timestamp,
 ip_address varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 }	# End of create_logons_table.
 
@@ -502,7 +484,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_manufacturers_table.
 
@@ -526,7 +508,7 @@ url varchar(255) not null,
 url_clicked integer not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_manufacturers_info_table.
 
@@ -552,7 +534,7 @@ date_added timestamp $time_option not null,
 date_modified timestamp $time_option not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_order_history_table.
 
@@ -578,7 +560,7 @@ tax_rate decimal(7,4),
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_order_items_table.
 
@@ -599,7 +581,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_order_statuses_table.
 
@@ -627,7 +609,7 @@ order_status_id integer not null references order_statuses(id),
 payment_method_id integer not null references payment_methods(id)
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_orders_table.
 
@@ -647,7 +629,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_payment_methods_table.
 
@@ -667,7 +649,7 @@ customer_id integer not null references customers,
 phone_number_id integer not null references phone_numbers(id)
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_phone_lists_table.
 
@@ -687,7 +669,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_phone_number_types_table.
 
@@ -707,7 +689,7 @@ phone_number_type_id integer not null references phone_number_types(id),
 number varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_phone_numbers_table.
 
@@ -727,7 +709,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_product_classes_table.
 
@@ -747,7 +729,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_product_colors_table.
 
@@ -773,7 +755,7 @@ upper_name varchar(255) not null,
 url varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_product_descriptions_table.
 
@@ -793,7 +775,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_product_sizes_table.
 
@@ -813,7 +795,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_product_statuses_table.
 
@@ -833,7 +815,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_product_styles_table.
 
@@ -853,7 +835,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_product_types_table.
 
@@ -889,7 +871,7 @@ upper_name varchar(255) not null,
 weight decimal(5,2) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_products_table.
 
@@ -910,7 +892,7 @@ category_id integer not null references categories(id),
 product_id integer not null references products(id)
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_products_to_categories_table.
 
@@ -929,7 +911,7 @@ id char(32) not null primary key,
 a_session $type not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 }	# End of create_sessions_table.
 
@@ -957,7 +939,7 @@ street_4 varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_street_addresses_table.
 
@@ -981,7 +963,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_tax_classes_table.
 
@@ -1009,7 +991,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_tax_rates_table.
 
@@ -1029,7 +1011,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_titles_table.
 
@@ -1050,7 +1032,7 @@ to_id integer not null references weight_classes(id),
 rule decimal(15,4) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_weight_class_rules_table.
 
@@ -1072,7 +1054,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_weight_classes_table.
 
@@ -1092,7 +1074,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_yes_no_table.
 
@@ -1114,7 +1096,7 @@ name varchar(255) not null,
 upper_name varchar(255) not null
 ) $engine
 SQL
-	$self -> inform($table_name, 'created', $result);
+	$self -> report($table_name, 'created', $result);
 
 } # End of create_zones_table.
 
@@ -1199,14 +1181,14 @@ sub drop_table
 
 	if ($table_name ne 'log')
 	{
-		$self -> inform($table_name, 'dropped');
+		$self -> report($table_name, 'dropped');
 	}
 
 } # End of drop_table.
 
 # -----------------------------------------------
 
-sub inform
+sub report
 {
 	my($self, $table_name, $message, $result) = @_;
 
@@ -1219,10 +1201,201 @@ sub inform
 		$self -> logger -> log(debug => "Table '$table_name' $message");
 	}
 
-} # End of inform.
+} # End of report.
 
 # -----------------------------------------------
 
 __PACKAGE__ -> meta -> make_immutable;
 
 1;
+
+=pod
+
+=head1 NAME
+
+L<Business::Cart::Generic::Database::Create> - Basic shopping cart
+
+=head1 Synopsis
+
+See L<Business::Cart::Generic>.
+
+=head1 Description
+
+L<Business::Cart::Generic> implements parts of osCommerce and PrestaShop in Perl.
+
+=head1 Installation
+
+See L<Business::Cart::Generic>.
+
+=head1 Constructor and Initialization
+
+=head2 Parentage
+
+This class extends L<Business::Cart::Generic::Base>.
+
+=head2 Using new()
+
+See scripts/create.tables.pl and scripts/drop.tables.pl.
+
+=head1 Methods
+
+=head2 create_all_tables()
+
+Runs a db transaction to create all tables.
+
+Calls create_tables().
+
+Returns nothing.
+
+=head2 create_tables()
+
+Helper for create_all_tables(). Never called directly.
+
+Returns nothing.
+
+=head2 create_categories_table()
+
+=head2 create_category_descriptions_table()
+
+=head2 create_countries_table()
+
+=head2 create_currencies_table()
+
+=head2 create_customers_table()
+
+=head2 create_customer_statuses_table()
+
+=head2 create_customer_types_table()
+
+=head2 create_email_addresses_table()
+
+=head2 create_email_address_types_table()
+
+=head2 create_email_lists_table()
+
+=head2 create_genders_table()
+
+=head2 create_languages_table()
+
+=head2 create_log_table()
+
+=head2 create_logons_table()
+
+=head2 create_manufacturers_table()
+
+=head2 create_manufacturers_info_table()
+
+=head2 create_order_history_table()
+
+=head2 create_order_items_table()
+
+=head2 create_orders_table()
+
+=head2 create_order_statuses_table()
+
+=head2 create_payment_methods_table()
+
+=head2 create_phone_lists_table()
+
+=head2 create_phone_numbers_table()
+
+=head2 create_phone_number_types_table()
+
+=head2 create_product_classes_table()
+
+=head2 create_product_colors_table()
+
+=head2 create_product_descriptions_table()
+
+=head2 create_products_table()
+
+=head2 create_product_sizes_table()
+
+=head2 create_product_statuses_table()
+
+=head2 create_products_to_categories_table()
+
+=head2 create_product_styles_table()
+
+=head2 create_product_types_table()
+
+=head2 create_sessions_table()
+
+=head2 create_street_addresses_table()
+
+=head2 create_tax_classes_table()
+
+=head2 create_tax_rates_table()
+
+=head2 create_titles_table()
+
+=head2 create_weight_classes_table()
+
+=head2 create_weight_class_rules_table()
+
+=head2 create_yes_no_table()
+
+=head2 create_zones_table()
+
+=head2 drop_all_tables()
+
+Runs a db transaction to drop all tables.
+
+Calls drop_tables().
+
+Returns nothing.
+
+=head2 drop_tables()
+
+Helper for drop_all_tables(). Never called directly.
+
+Calls drop_table().
+
+Returns nothing.
+
+=head2 drop_table($table_name)
+
+Drop the named table.
+
+Returns nothing.
+
+=head2 report($table_name, $message, $result)
+
+Report on the success of otherwise of create_table().
+
+Returns nothing.
+
+=head1 Machine-Readable Change Log
+
+The file CHANGES was converted into Changelog.ini by L<Module::Metadata::Changes>.
+
+=head1 Version Numbers
+
+Version numbers < 1.00 represent development versions. From 1.00 up, they are production versions.
+
+=head1 Thanks
+
+Many thanks are due to the people who chose to make osCommerce and PrestaShop, Zen Cart, etc, Open Source.
+
+=head1 Support
+
+Email the author, or log a bug on RT:
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Business::Cart::Generic>.
+
+=head1 Author
+
+L<Business::Cart::Generic> was written by Ron Savage I<E<lt>ron@savage.net.auE<gt>> in 2011.
+
+Home page: L<http://savage.net.au/index.html>.
+
+=head1 Copyright
+
+Australian copyright (c) 2011, Ron Savage.
+
+	All Programs of mine are 'OSI Certified Open Source Software';
+	you can redistribute them and/or modify them under the terms of
+	The Artistic License, a copy of which is available at:
+	http://www.opensource.org/licenses/index.html
+
+=cut

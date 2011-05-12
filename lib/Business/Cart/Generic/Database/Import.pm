@@ -26,7 +26,7 @@ extends 'Business::Cart::Generic::Database::Base';
 
 use namespace::autoclean;
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 # -----------------------------------------------
 
@@ -372,28 +372,6 @@ sub populate_countries_table
 			});
 	}
 
-=pop
-
-	Change *::Database::Create.create_countries_table() before activating this code.
-	See also populate_zones_table() below, and default_country_id etc in the config file.
-
-	my($path)    = "$FindBin::Bin/../data/countries.csv";
-	my($country) = $self -> read_csv_file($path);
-
-	for my $line (@$country)
-	{
-		$result = $rs -> create
-			({
-			 address_format => $$line{address_format},
-			 iso2_code      => $$line{iso2},
-			 iso3_code      => $$line{iso3},
-			 name           => $$line{name},
-			 upper_name     => uc $$line{name},
-			});
-	}
-
-=cut
-
 } # End of populate_countries_table.
 
 # -----------------------------------------------
@@ -634,26 +612,6 @@ sub populate_zones_table
 		}
 	}
 
-=pod
-
-	See also populate_countries_table() above.
-
-	my($path) = "$FindBin::Bin/../data/zones.csv";
-	my($zone) = $self -> read_csv_file($path);
-
-	for my $line (@$zone)
-	{
-		$result = $rs -> create
-			({
-			 code       => $$line{code},
-			 country_id => $$line{country_id},
-			 name       => $$line{name},
-			 upper_name => uc $$line{name},
-			});
-	}
-
-=cut
-
 } # End of populate_zones_table.
 
 # -----------------------------------------------
@@ -675,3 +633,170 @@ sub read_csv_file
 __PACKAGE__ -> meta -> make_immutable;
 
 1;
+
+=pod
+
+=head1 NAME
+
+L<Business::Cart::Generic::Database::Import> - Basic shopping cart
+
+=head1 Synopsis
+
+See L<Business::Cart::Generic>.
+
+=head1 Description
+
+L<Business::Cart::Generic> implements parts of osCommerce and PrestaShop in Perl.
+
+=head1 Installation
+
+See L<Business::Cart::Generic>.
+
+=head1 Constructor and Initialization
+
+=head2 Parentage
+
+This class extends L<Business::Cart::Generic::Database::Base>.
+
+=head2 Using new()
+
+See scripts/clean.all.data.pl and scripts/populate.tables.pl.
+
+=head1 Methods
+
+=head2 clean_all_data()
+
+Wrapper which calls the next 5 methods.
+
+Returns nothing.
+
+=head2 clean_country_data()
+
+Reformats the osCommerce data for the countries table.
+
+Reads data/raw.countries.txt and writes data/countries.csv.
+
+Returns nothing.
+
+I now use Locale::SubCountry instead of the osCommerce data. See the CHANGES notes for V 0.82.
+
+=head2 clean_currency_data()
+
+Reformats the osCommerce data for the currencies table.
+
+Reads data/raw.currencies.txt and writes data/currencies.csv.
+
+=head2 clean_language_data()
+
+Reformats the osCommerce data for the languages table.
+
+Reads data/raw.languages.txt and writes data/languages.csv.
+
+=head2 clean_order_statuses_data()
+
+Reformats the osCommerce data for the order_statuses table.
+
+Reads data/raw.order.statuses.txt and writes data/order.statuses.csv.
+
+Since then I've manually added 'Checked out' to that table.
+
+=head2 clean_zone_data()
+
+Reformats the osCommerce data for the zones table.
+
+Reads data/raw.zones.txt and writes data/zones.csv.
+
+I now use Locale::SubCountry instead of the osCommerce data. See the CHANGES notes for V 0.82.
+
+=head2 populate_all_tables()
+
+Runs a db transaction to populate all tables.
+
+Calls populate_tables().
+
+Returns nothing.
+
+=head2 populate_tables()
+
+A helper for populate_all_tables(). Never called directly.
+
+Calls the next 9 methods.
+
+=head2 populate_countries_table()
+
+=head2 populate_zones_table()
+
+=head2 populate_currencies_table()
+
+=head2 populate_languages_table()
+
+=head2 populate_order_statuses_table()
+
+=head2 populate_table($csv_file_name, $class_name)
+
+Read the CSV file and use the given L<DBIx::Class> class to populate these tables:
+
+=over 4
+
+=item o customer_statuses
+
+=item o customer_types
+
+=item o email_address_types
+
+=item o genders
+
+=item o payment_methods
+
+=item o phone_number_types
+
+=item o titles
+
+=item o yes_no
+
+=back
+
+=head2 populate_tax_classes_table()
+
+=head2 populate_weight_classes_table()
+
+=head2 populate_weight_class_rules_table()
+
+=head2 read_csv_file($file_name)
+
+Uses Text::CSV_XS the read the given file. There I<must> be a header record in the file, listing the column names.
+
+=head1 Machine-Readable Change Log
+
+The file CHANGES was converted into Changelog.ini by L<Module::Metadata::Changes>.
+
+=head1 Version Numbers
+
+Version numbers < 1.00 represent development versions. From 1.00 up, they are production versions.
+
+=head1 Thanks
+
+Many thanks are due to the people who chose to make osCommerce and PrestaShop, Zen Cart, etc, Open Source.
+
+=head1 Support
+
+Email the author, or log a bug on RT:
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Business::Cart::Generic>.
+
+=head1 Author
+
+L<Business::Cart::Generic> was written by Ron Savage I<E<lt>ron@savage.net.auE<gt>> in 2011.
+
+Home page: L<http://savage.net.au/index.html>.
+
+=head1 Copyright
+
+Australian copyright (c) 2011, Ron Savage.
+
+	All Programs of mine are 'OSI Certified Open Source Software';
+	you can redistribute them and/or modify them under the terms of
+	The Artistic License, a copy of which is available at:
+	http://www.opensource.org/licenses/index.html
+
+=cut

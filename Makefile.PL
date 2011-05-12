@@ -8,7 +8,7 @@ WriteMakefile
  ($] ge '5.005') ?
  (
   AUTHOR   => 'Ron Savage (ron@savage.net.au)',
-  ABSTRACT => 'Basic shopping cart. So far, the GUI only supports searching for orders',
+  ABSTRACT => 'Basic shopping cart',
     ) : (),
  clean =>
  {
@@ -23,7 +23,15 @@ WriteMakefile
  NAME      => 'Business::Cart::Generic',
 # Next line runs copy.config.pl when user runs 'make'.
 # Warning: '...' => 0 is OK but => '' or undef are ignored.
- PL_FILES  => {'scripts/copy.config.pl' => 'Copying...'},
+ PL_FILES   => {'scripts/copy.config.pl' => 'Copying...'},
+ META_MERGE =>
+ {
+	 no_index =>
+	 {
+		 directory => [qw{lib/Business/Cart/Generic/Schema/}],
+		 file      => [qw{lib/Business/Cart/Generic/Schema.pm}],
+	 },
+ },
  PREREQ_PM =>
  {
 	 Brannigan                   => 0.8,

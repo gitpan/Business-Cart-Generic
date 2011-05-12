@@ -14,7 +14,7 @@ $class -> new
 (
  module_name    => 'Business::Cart::Generic',
  license        => 'artistic',
- dist_abstract  => 'Basic shopping cart. So far, the GUI only supports searching for orders',
+ dist_abstract  => 'Basic shopping cart',
  dist_author    => 'Ron Savage <ron@savage.net.au>',
  build_requires =>
  {
@@ -24,6 +24,14 @@ $class -> new
  configure_requires =>
  {
  	 Module::Build => 0.3800,
+ },
+ meta_add =>
+ {
+	 no_index =>
+	 {
+		 directory => [qw{lib/Business/Cart/Generic/Schema/}],
+		 file      => [qw{lib/Business/Cart/Generic/Schema.pm}],
+	 },
  },
  requires =>
  {

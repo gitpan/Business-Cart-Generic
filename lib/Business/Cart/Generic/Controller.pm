@@ -13,7 +13,7 @@ use Text::Xslate;
 
 # We don't use Moose because we ias CGI::Application.
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 # -----------------------------------------------
 
@@ -106,3 +106,114 @@ sub teardown
 # -----------------------------------------------
 
 1;
+
+=pod
+
+=head1 NAME
+
+L<Business::Cart::Generic::Controller> - Basic shopping cart
+
+=head1 Synopsis
+
+See L<Business::Cart::Generic>.
+
+=head1 Description
+
+L<Business::Cart::Generic> implements parts of osCommerce and PrestaShop in Perl.
+
+=head1 Installation
+
+See L<Business::Cart::Generic>.
+
+=head1 Constructor and Initialization
+
+=head2 Parentage
+
+This is a sub-class of L<CGI::Application>.
+
+=head2 Using new()
+
+This class is never used stand-alone. See e.g. L<Business::Cart::Generic::Controller::Order>.
+
+=head1 Methods
+
+=head2 cgiapp_prerun($rm)
+
+$rm is a run mode.
+
+This method is a classic L<CGI::Application> cgiapp_prerun() method. See that module's documentation for details.
+
+Using the L<CGI::Application> object's param() method, it sets these parameters:
+
+=over 4
+
+=item o config
+
+This is the hashref returned from Business::Cart::Generic::Util::Config -> new() -> config();
+
+=item o db
+
+This is an object of type L<Business::Cart::Generic::Database>.
+
+=item o logger
+
+This is an object of type L<Business::Cart::Generic::Util::Logger>.
+
+=item o templater
+
+This is an object of type L<Text::Xslate>.
+
+=item o view
+
+This is an object of type L<Business::Cart::Generic::View>.
+
+=back
+
+=head2 log($level, $s)
+
+This is a shortcut for $self -> param('logger') -> log($level => $s) for use by Business::Cart::Generic::Controller::* objects,
+which are all sub-classes of this module.
+
+See L<Business::Cart::Generic::Util::Logger> for details.
+
+=head2 teardown()
+
+This method is a classic L<CGI::Application> teardown() method. See that module's documentation for details.
+
+It flushes the session to disk (if there were any changes), and closes down the database connexions for both the
+connector object and the logger object.
+
+=head1 Machine-Readable Change Log
+
+The file CHANGES was converted into Changelog.ini by L<Module::Metadata::Changes>.
+
+=head1 Version Numbers
+
+Version numbers < 1.00 represent development versions. From 1.00 up, they are production versions.
+
+=head1 Thanks
+
+Many thanks are due to the people who chose to make osCommerce and PrestaShop, Zen Cart, etc, Open Source.
+
+=head1 Support
+
+Email the author, or log a bug on RT:
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Business::Cart::Generic>.
+
+=head1 Author
+
+L<Business::Cart::Generic> was written by Ron Savage I<E<lt>ron@savage.net.auE<gt>> in 2011.
+
+Home page: L<http://savage.net.au/index.html>.
+
+=head1 Copyright
+
+Australian copyright (c) 2011, Ron Savage.
+
+	All Programs of mine are 'OSI Certified Open Source Software';
+	you can redistribute them and/or modify them under the terms of
+	The Artistic License, a copy of which is available at:
+	http://www.opensource.org/licenses/index.html
+
+=cut

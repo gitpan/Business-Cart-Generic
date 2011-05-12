@@ -1,6 +1,6 @@
 package Business::Cart::Generic;
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 1;
 
@@ -15,7 +15,6 @@ L<Business::Cart::Generic> - Basic shopping cart
 Convert parts of L<osCommerce|http://www.oscommerce.com/> and L<PrestaShop|http://prestashop.com> into Perl.
 
 See httpd/cgi-bin/generic.cart.psgi and httpd/cgi-bin/generic.cart.cgi, or import.products.pl and place.orders.pl.
-
 
 =head1 Description
 
@@ -320,11 +319,11 @@ Or, install generic.cart.cgi and point your browser at:
 
 =head1 Constructor and Initialization
 
-C<new()> is called as C<< my($builder) = Business::Cart::Generic -> new(k1 => v1, k2 => v2, ...) >>.
+C<new()> is called as C<< my($obj) = Business::Cart::Generic -> new(k1 => v1, k2 => v2, ...) >>.
 
 It returns a new object of type C<Business::Cart::Generic>.
 
-Key-value pairs in accepted in the parameter list (see corresponding methods for details):
+Key-value pairs accepted in the parameter list (see corresponding methods for details):
 
 =over 4
 

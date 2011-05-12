@@ -1,9 +1,16 @@
 Revision history for Perl extension Business::Cart::Generic.
 
+0.83  Wed May 11 17:05:00 2011
+	  - No code changes.
+	  - Add POD to all modules which lacked it (21 in all).
+	  - Rename some method params which were mis-named.
+	  - Patch Build.PL and Makefile.PL to stop indexing of DBIx::Class-derived classes.
+	  - Fix abstract in Build.PL/Makefile.PL, by removing comment about GUI being limited to searches.
+
 0.82  Thu Apr 21 10:45:00 2011
 	- Implement online orders. This required many changes, including abandoning the countries/zones from
-	  osCommerse, and using those from Locale::SubCountry instead (to implement the onChange logic for the
-	  countries menu wiht less pain).
+	  osCommerce, and using those from Locale::SubCountry instead (to implement the onChange logic for the
+	  countries menu with less pain).
 	- Change code, and docs, so storing data into order_items table does not perform calculations, e.g. tax.
 	  Only perform calculations when reporting (outputting order items, totals).
 	- Split place.orders.pl into import.products.pl and place.orders.pl.

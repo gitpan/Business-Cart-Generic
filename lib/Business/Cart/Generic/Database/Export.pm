@@ -40,7 +40,7 @@ has tx =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 # -----------------------------------------------
 
@@ -193,3 +193,96 @@ sub read_products_table
 __PACKAGE__ -> meta -> make_immutable;
 
 1;
+
+=pod
+
+=head1 NAME
+
+L<Business::Cart::Generic::Database::Export> - Basic shopping cart
+
+=head1 Synopsis
+
+See L<Business::Cart::Generic>.
+
+=head1 Description
+
+L<Business::Cart::Generic> implements parts of osCommerce and PrestaShop in Perl.
+
+=head1 Installation
+
+See L<Business::Cart::Generic>.
+
+=head1 Constructor and Initialization
+
+=head2 Parentage
+
+This class extends L<Business::Cart::Generic::Database::Base>.
+
+=head2 Using new()
+
+See scripts/export.orders.as.html.pl and scripts/export.products.as.html.pl.
+
+=head1 Methods
+
+=head2 orders_as_html()
+
+Outputs each order using export.order.page.tx, and outputs an index using export.order.index.page.tx.
+
+The location of these templates is given by 'template_path' in the config file.
+
+The output directory is given by the 'order_html_path' in the config file.
+
+Returns nothing.
+
+=head2 products_as_html()
+
+Similar to orders_as_html(), except it uses basic.table.tx, and outputs all products to one (1) HTML table.
+
+Returns nothing.
+
+=head2 read_orders_table()
+
+Returns an arrayref of orders, each inflated using L<Business::Cart::Generic::Database::Order/inflate_order()>.
+
+=head2 read_products_table()
+
+Returns an arrayref of products, each inflated using L<Business::Cart::Generic::Database::Product/inflate_product()>.
+
+=head1 TODO
+
+Add a verbose command line switch, to enable the user to silence prints when exporting orders and products.
+
+=head1 Machine-Readable Change Log
+
+The file CHANGES was converted into Changelog.ini by L<Module::Metadata::Changes>.
+
+=head1 Version Numbers
+
+Version numbers < 1.00 represent development versions. From 1.00 up, they are production versions.
+
+=head1 Thanks
+
+Many thanks are due to the people who chose to make osCommerce and PrestaShop, Zen Cart, etc, Open Source.
+
+=head1 Support
+
+Email the author, or log a bug on RT:
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Business::Cart::Generic>.
+
+=head1 Author
+
+L<Business::Cart::Generic> was written by Ron Savage I<E<lt>ron@savage.net.auE<gt>> in 2011.
+
+Home page: L<http://savage.net.au/index.html>.
+
+=head1 Copyright
+
+Australian copyright (c) 2011, Ron Savage.
+
+	All Programs of mine are 'OSI Certified Open Source Software';
+	you can redistribute them and/or modify them under the terms of
+	The Artistic License, a copy of which is available at:
+	http://www.opensource.org/licenses/index.html
+
+=cut

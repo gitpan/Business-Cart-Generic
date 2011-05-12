@@ -20,7 +20,7 @@ has query =>
 
 use namespace::autoclean;
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 # -----------------------------------------------
 
@@ -144,3 +144,92 @@ zone_id
 __PACKAGE__ -> meta -> make_immutable;
 
 1;
+
+=pod
+
+=head1 NAME
+
+L<Business::Cart::Generic::Util::Validator> - Basic shopping cart
+
+=head1 Synopsis
+
+See L<Business::Cart::Generic>.
+
+=head1 Description
+
+L<Business::Cart::Generic> implements parts of osCommerce and PrestaShop in Perl.
+
+=head1 Installation
+
+See L<Business::Cart::Generic>.
+
+=head1 Constructor and Initialization
+
+=head2 Parentage
+
+This class extends L<Business::Cart::Generic::Database::Base>.
+
+=head2 Using new()
+
+C<new()> is called as C<< my($obj) = Business::Cart::Generic::Util::Validator -> new(k1 => v1, k2 => v2, ...) >>.
+
+It returns a new object of type C<Business::Cart::Generic::Util::Validator>.
+
+Key-value pairs accepted in the parameter list:
+
+=over 4
+
+=item o query => $query
+
+Takes an object of type L<CGI> or similar.
+
+This key => value pair is mandatory.
+
+=back
+
+=head1 Methods
+
+=head2 clean_user_data($data, $max_length, $integer)
+
+Used internally.
+
+=head2 validate_order()
+
+Validates the form parameters retrieved from the query object.
+
+Returns the hashref returned from the process() method of the L<Brannigan> class.
+
+=head1 Machine-Readable Change Log
+
+The file CHANGES was converted into Changelog.ini by L<Module::Metadata::Changes>.
+
+=head1 Version Numbers
+
+Version numbers < 1.00 represent development versions. From 1.00 up, they are production versions.
+
+=head1 Thanks
+
+Many thanks are due to the people who chose to make osCommerce and PrestaShop, Zen Cart, etc, Open Source.
+
+=head1 Support
+
+Email the author, or log a bug on RT:
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Business::Cart::Generic>.
+
+=head1 Author
+
+L<Business::Cart::Generic> was written by Ron Savage I<E<lt>ron@savage.net.auE<gt>> in 2011.
+
+Home page: L<http://savage.net.au/index.html>.
+
+=head1 Copyright
+
+Australian copyright (c) 2011, Ron Savage.
+
+	All Programs of mine are 'OSI Certified Open Source Software';
+	you can redistribute them and/or modify them under the terms of
+	The Artistic License, a copy of which is available at:
+	http://www.opensource.org/licenses/index.html
+
+=cut

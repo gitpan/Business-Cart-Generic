@@ -60,12 +60,10 @@ httpd/cgi-bin/generic.cart.psgi
 lib/Business/Cart/Generic.pm
 lib/Business/Cart/Generic/Base.pm
 lib/Business/Cart/Generic/Controller.pm
-lib/Business/Cart/Generic/Controller/AutoComplete.pm
 lib/Business/Cart/Generic/Controller/Initialize.pm
 lib/Business/Cart/Generic/Controller/Order.pm
 lib/Business/Cart/Generic/Controller/Search.pm
 lib/Business/Cart/Generic/Database.pm
-lib/Business/Cart/Generic/Database/AutoComplete.pm
 lib/Business/Cart/Generic/Database/Base.pm
 lib/Business/Cart/Generic/Database/Create.pm
 lib/Business/Cart/Generic/Database/Export.pm
@@ -121,7 +119,6 @@ lib/Business/Cart/Generic/Util/Config.pm
 lib/Business/Cart/Generic/Util/Logger.pm
 lib/Business/Cart/Generic/Util/Validator.pm
 lib/Business/Cart/Generic/View.pm
-lib/Business/Cart/Generic/View/AutoComplete.pm
 lib/Business/Cart/Generic/View/Base.pm
 lib/Business/Cart/Generic/View/Order.pm
 lib/Business/Cart/Generic/View/Product.pm

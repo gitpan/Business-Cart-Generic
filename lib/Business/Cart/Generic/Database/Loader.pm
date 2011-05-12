@@ -24,7 +24,7 @@ extends 'Business::Cart::Generic::Database::Base';
 
 use namespace::autoclean;
 
-our $VERSION = '0.82';
+our $VERSION = '0.83';
 
 # -----------------------------------------------
 
@@ -555,3 +555,136 @@ sub read_csv_file
 __PACKAGE__ -> meta -> make_immutable;
 
 1;
+
+=pod
+
+=head1 NAME
+
+L<Business::Cart::Generic::Database::Loader> - Basic shopping cart
+
+=head1 Synopsis
+
+See L<Business::Cart::Generic>.
+
+=head1 Description
+
+L<Business::Cart::Generic> implements parts of osCommerce and PrestaShop in Perl.
+
+=head1 Installation
+
+See L<Business::Cart::Generic>.
+
+=head1 Constructor and Initialization
+
+=head2 Parentage
+
+This class extends L<Business::Cart::Generic::Database::Base>.
+
+=head2 Using new()
+
+See scripts/import.produces.pl and scripts/place.orders.pl.
+
+=head1 Methods
+
+=head2 generate_description($name, $type, $style, $color, $class, $size)
+
+Use various fields from data/products.csv to generate a description for each product.
+
+=head2 import_products()
+
+Runs a db transaction to import product data.
+
+Calls populate_tables().
+
+Returns nothing.
+
+=head2 place_orders()
+
+Imports orders from data/orders.csv.
+
+Calls populate_orders_table.
+
+Returns nothing.
+
+=head2 populate_tables()
+
+Helper for import_products(). Never called directly.
+
+Returns nothing.
+
+=head2 populate_manufacturers_table()
+
+=head2 populate_orders_table()
+
+Calls populate_order_history_table(), and populate_order_items_table().
+
+=head2 populate_order_history_table()
+
+Called by populate_orders_table().
+
+=head2 populate_order_items_table()
+
+Called by populate_orders_table().
+
+=head2 populate_products_table()
+
+=head2 populate_street_addresses_table()
+
+=head2 populate_customers_table()
+
+=head2 populate_table($csv_file_name, $class_name)
+
+Read the CSV file and use the given L<DBIx::Class> class to populate these tables:
+
+=over 4
+
+=item o produce_classes
+
+=item o product_colors
+
+=item o product_sizes
+
+=item o product_statuses
+
+=item o product_styles
+
+=item o product_types
+
+=back
+
+=head2 populate_tax_rates_table()
+
+=head1 Machine-Readable Change Log
+
+The file CHANGES was converted into Changelog.ini by L<Module::Metadata::Changes>.
+
+=head1 Version Numbers
+
+Version numbers < 1.00 represent development versions. From 1.00 up, they are production versions.
+
+=head1 Thanks
+
+Many thanks are due to the people who chose to make osCommerce and PrestaShop, Zen Cart, etc, Open Source.
+
+=head1 Support
+
+Email the author, or log a bug on RT:
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Business::Cart::Generic>.
+
+=head1 Author
+
+L<Business::Cart::Generic> was written by Ron Savage I<E<lt>ron@savage.net.auE<gt>> in 2011.
+
+Home page: L<http://savage.net.au/index.html>.
+
+=head1 Copyright
+
+Australian copyright (c) 2011, Ron Savage.
+
+	All Programs of mine are 'OSI Certified Open Source Software';
+	you can redistribute them and/or modify them under the terms of
+	The Artistic License, a copy of which is available at:
+	http://www.opensource.org/licenses/index.html
+
+=cut
