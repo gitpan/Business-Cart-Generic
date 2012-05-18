@@ -1,5 +1,19 @@
 Revision history for Perl extension Business::Cart::Generic.
 
+0.85  Fri May 18 13:59:00 2012
+	- Replace Locale::SubCountry with WWW::Scraper::Wikipedia::ISO3166::Database, for populating the
+		countries and subcountries (zones) tables. The big effects of this are:
+		o Country and subcountry (zone) data is much more up-to-date.
+		o Subcountries (zones) are in (more-or-less) latin characters. Native scripts are no longer used,
+			because I could not find a source to keep those script entries up-to-date.
+	- Stop shipping data/countries.csv, data/raw.countries.txt, data/raw.zones.txt and data/zones.csv.
+	- Stop shipping scripts/test.country.pl.
+
+0.84  Sat Aug 27 10:46:00 2011
+	- Add Plack::Middleware::ContentLength to *.psgi.
+	- Change web.page.tx to add /build/yui to the path to yui-min.js.
+	- Unreleased.
+
 0.83  Wed May 11 17:05:00 2011
 	  - No code changes.
 	  - Add POD to all modules which lacked it (21 in all).

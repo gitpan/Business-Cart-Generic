@@ -1,6 +1,6 @@
 package Business::Cart::Generic;
 
-our $VERSION = '0.83';
+our $VERSION = '0.85';
 
 1;
 
@@ -8,7 +8,7 @@ our $VERSION = '0.83';
 
 =head1 NAME
 
-L<Business::Cart::Generic> - Basic shopping cart
+Business::Cart::Generic - Basic shopping cart
 
 =head1 Synopsis
 
@@ -114,7 +114,12 @@ L<http://developer.yahoo.com/yui>.
 All development was done using V 3.3.0.
 
 With YUI3 you download just 1 file: yui-min.js, and install it somewhere under your
-web server's docroot. Here's how I install it. How to configure your setup is explained below.
+web server's docroot. Actually, this downloads - at runtime - alll required *.js files
+from YAHOO.
+
+I don't do that anymore. I install YUI3 under my web server's docroot.
+
+Here's how I install it. How to configure your setup is explained below.
 
 =over 4
 
@@ -122,9 +127,11 @@ web server's docroot. Here's how I install it. How to configure your setup is ex
 
 =item o Under that, my docroot is /dev/shm/html/
 
-=item o I install yui-min.js in /dev/shm/html/assets/js/yui3/
+=item o I install YUI3 in /dev/shm/html/assets/js/yui3/
 
-=item o The corresponding URL is /assets/js/yui3/yui-min.js
+	shell>cp -r ~/Downloads/yui3 $DR/assets/js
+
+=item o The corresponding URL for yui-min.js becomes /assets/js/yui3/build/yui/yui-min.js
 
 =item o Now for the templates shipped with this module
 

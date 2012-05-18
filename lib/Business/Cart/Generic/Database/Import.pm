@@ -11,8 +11,6 @@ use Business::Cart::Generic::Database;
 
 use IO::File;
 
-use Locale::SubCountry;
-
 use Moose;
 
 use Perl6::Slurp;
@@ -22,11 +20,21 @@ use Text::Xslate;
 
 use Try::Tiny;
 
+use WWW::Scraper::Wikipedia::ISO3166::Database;
+
 extends 'Business::Cart::Generic::Database::Base';
+
+has country_map =>
+(
+	default  => sub{return build_country_map()},
+	is       => 'rw',
+	isa      => 'HashRef',
+	required => 0,
+);
 
 use namespace::autoclean;
 
-our $VERSION = '0.83';
+our $VERSION = '0.85';
 
 # -----------------------------------------------
 
@@ -46,69 +54,34 @@ sub BUILD
 }	# End of BUILD.
 
 # -----------------------------------------------
+# Warning: This is a function. Hence no $self.
+
+sub build_country_map
+{
+	my($country) = WWW::Scraper::Wikipedia::ISO3166::Database -> new -> read_countries_table;
+
+	my(%code2country);
+
+	for my $id (keys %$country)
+	{
+		$code2country{$$country{$id}{code2} } = {%{$$country{$id} } };
+	}
+
+	return \%code2country;
+
+} # End of build_country_map.
+
+# -----------------------------------------------
 
 sub clean_all_data
 {
 	my($self) = @_;
 
-	$self -> clean_country_data;
-	$self -> clean_zone_data;
 	$self -> clean_currency_data;
 	$self -> clean_language_data;
 	$self -> clean_order_statuses_data;
 
 } # End of clean_all_data.
-
-# -----------------------------------------------
-
-sub clean_country_data
-{
-	my($self)          = @_;
-	my($input_path)    = "$FindBin::Bin/../data/raw.countries.txt";
-	my(@original_data) = slurp($input_path, {chomp => 1});
-
-	my(@field);
-	my($line);
-	my(@raw_data);
-
-	push @raw_data, '"name","iso2","iso3","address_format"';
-
-	for $line (@original_data)
-	{
-		# Expected format:
-		# INSERT INTO osc_countries VALUES (1,'Afghanistan','AF','AFG','');
-		# INSERT INTO osc_countries VALUES (52,'Cote D\'Ivoire','CI','CIV','');
-
-		$line     = substr($line, 0, - 2); # Discard );.
-		@field    = split(/\s*,\s*/, $line, 2);
-		$field[1] =~ s/\\n/#/g; # Inside address_format.
-		$field[1] =~ s/\\'/!/;  # 'Cote D\'Ivoire'.
-		$field[1] =~ tr/'/"/;   # For Text::CSV_XS.
-		$field[1] =~ s/!/'/;    # 'Cote D\'Ivoire'.
-
-		push @raw_data, $field[1];
-	}
-
-	my($output_path) = "$FindBin::Bin/../data/countries.csv";
-
-	open(OUT, '>', $output_path) || die "Can't open($output_path): $!";
-
-	my($csv) = Text::CSV_XS -> new({allow_whitespace => 1});
-
-	my($status);
-	my(%target);
-
-	while ($line = shift @raw_data)
-	{
-		$status = $csv -> parse($line) || die "Can't parse $line";
-		@field  = $csv -> fields;
-
-		print OUT '"', join('","', @field), qq|"\n|;
-	}
-
-	close OUT;
-
-} # End of clean_country_data.
 
 # -----------------------------------------------
 
@@ -262,59 +235,6 @@ sub clean_order_statuses_data
 
 # -----------------------------------------------
 
-sub clean_zone_data
-{
-	my($self)          = @_;
-	my($input_path)    = "$FindBin::Bin/../data/raw.zones.txt";
-	my(@original_data) = slurp($input_path, {chomp => 1});
-
-	my(@field);
-	my($line);
-	my(@raw_data);
-
-	push @raw_data, '"country_id","code","name"';
-
-	for $line (@original_data)
-	{
-		# Expected format:
-		# INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (1,'BDS','بد خشان');
-		# INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (4,'MA','Manu\'a');
-
-		$line     = substr($line, 0, - 2); # Discard );.
-		@field    = split(/VALUES \(/, $line);
-		$field[1] =~ s/\\'/!/; # 'Manu\a'.
-		@field    = split(/\s*,\s*/, $field[1]);
-		$field[1] =~ tr/'/"/;  # For Text::CSV_XS.
-		$field[1] =~ s/!/'/;   # 'Manu\a'.
-		$field[2] =~ tr/'/"/;  # For Text::CSV_XS.
-		$field[2] =~ s/!/'/;   # 'Manu\a'.
-
-		push @raw_data, join(',', @field[0 .. 2]);
-	}
-
-	my($output_path) = "$FindBin::Bin/../data/zones.csv";
-
-	open(OUT, '>', $output_path) || die "Can't open($output_path): $!";
-
-	my($csv) = Text::CSV_XS -> new({allow_whitespace => 1, binary => 1});
-
-	my($status);
-	my(%target);
-
-	while ($line = shift @raw_data)
-	{
-		$status = $csv -> parse($line) || die "Can't parse $line";
-		@field  = $csv -> fields;
-
-		print OUT '"', join('","', @field), qq|"\n|;
-	}
-
-	close OUT;
-
-} # End of clean_zone_data.
-
-# -----------------------------------------------
-
 sub populate_all_tables
 {
 	my($self) = @_;
@@ -355,20 +275,19 @@ sub populate_tables
 
 sub populate_countries_table
 {
-	my($self)    = @_;
-	my($rs)      = $self -> schema -> resultset('Country');
-	my($world)   = Locale::SubCountry::World -> new;
-	my(%country) = $world -> code_full_name_hash;
+	my($self)        = @_;
+	my($rs)          = $self -> schema -> resultset('Country');
+	my($country_map) = $self -> country_map;
 
 	my($result);
 
-	for my $code (sort keys %country)
+	for my $code (sort keys %$country_map)
 	{
 		$result = $rs -> create
 			({
 			 code       => $code,
-			 name       => $country{$code},
-			 upper_name => uc $country{$code},
+			 name       => $$country_map{$code}{name},
+			 upper_name => uc $$country_map{$code}{name},
 			});
 	}
 
@@ -573,39 +492,50 @@ sub populate_weight_classes_table
 
 sub populate_zones_table
 {
-	my($self)    = @_;
-	my($rs)      = $self -> schema -> resultset('Zone');
-	my(@country) = $self -> schema -> resultset('Country') -> search({}, {columns => [qw/id name/]});
+	my($self)         = @_;
+	my($rs)           = $self -> schema -> resultset('Zone');
+	my($country_map)  = $self -> country_map;
+	my($subcountries) = WWW::Scraper::Wikipedia::ISO3166::Database -> new -> read_subcountries_table;
 
-	my($country, $code, %code2hash);
-	my($locale);
 	my($result);
+	my(@zones);
 
-	for $country (@country)
+	for my $code (keys %$country_map)
 	{
-		$locale = Locale::SubCountry -> new($country -> name);
-
-		if ($locale -> has_sub_countries)
+		if ($$country_map{$code}{has_subcountries})
 		{
-			%code2hash = $locale -> code_full_name_hash;
+			# Move subcountries into @zones for ease of sorting.
 
-			for $code (sort keys %code2hash)
+			@zones = ();
+
+			for my $id (keys %$subcountries)
+			{
+				next if ($$subcountries{$id}{country_id} != $$country_map{$code}{id});
+
+				push @zones, {%{$$subcountries{$id} } };
+			}
+
+			for my $zone (sort{$$a{sequence} <=> $$b{sequence} } @zones)
 			{
 				$result = $rs -> create
 					({
 						code       => $code,
-						country_id => $country -> id,
-						name       => $code2hash{$code},
-						upper_name => uc $code2hash{$code},
+						country_id => $$country_map{$code}{id},
+						name       => $$zone{name},
+						upper_name => uc $$zone{name},
 					 });
 			}
+
+			# Zap used-up subcountries so %$subcountries shrinks and hence speeds up.
+
+			delete $$subcountries{$_} for map{$$_{id} } @zones;
 		}
 		else
 		{
 			$result = $rs -> create
 				({
 					code       => '-',
-					country_id => $country -> id,
+					country_id => $$country_map{$code}{id},
 					name       => 'No zones',
 					upper_name => uc 'No zones',
 				 });
@@ -666,19 +596,9 @@ See scripts/clean.all.data.pl and scripts/populate.tables.pl.
 
 =head2 clean_all_data()
 
-Wrapper which calls the next 5 methods.
+Wrapper which calls the next 4 methods.
 
 Returns nothing.
-
-=head2 clean_country_data()
-
-Reformats the osCommerce data for the countries table.
-
-Reads data/raw.countries.txt and writes data/countries.csv.
-
-Returns nothing.
-
-I now use Locale::SubCountry instead of the osCommerce data. See the CHANGES notes for V 0.82.
 
 =head2 clean_currency_data()
 
@@ -699,14 +619,6 @@ Reformats the osCommerce data for the order_statuses table.
 Reads data/raw.order.statuses.txt and writes data/order.statuses.csv.
 
 Since then I've manually added 'Checked out' to that table.
-
-=head2 clean_zone_data()
-
-Reformats the osCommerce data for the zones table.
-
-Reads data/raw.zones.txt and writes data/zones.csv.
-
-I now use Locale::SubCountry instead of the osCommerce data. See the CHANGES notes for V 0.82.
 
 =head2 populate_all_tables()
 

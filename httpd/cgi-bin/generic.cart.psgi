@@ -27,8 +27,9 @@ my($app) = CGI::Application::Dispatch -> as_psgi
 
 builder
 {
-	enable "Plack::Middleware::Static",
-	path => qr!^/(assets|favicon|yui)/!,
+	enable "ContentLength";
+	enable "Static",
+	path => qr!^/(assets|favicon|yui)!,
 	root => '/dev/shm/html';
 	$app;
 };

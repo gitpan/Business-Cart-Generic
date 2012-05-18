@@ -13,7 +13,7 @@ use Text::Xslate;
 
 # We don't use Moose because we ias CGI::Application.
 
-our $VERSION = '0.83';
+our $VERSION = '0.85';
 
 # -----------------------------------------------
 

@@ -13,7 +13,7 @@ extends 'Business::Cart::Generic::View::Base';
 
 use namespace::autoclean;
 
-our $VERSION = '0.83';
+our $VERSION = '0.85';
 
 # -----------------------------------------------
 

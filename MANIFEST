@@ -2,7 +2,6 @@ Build.PL
 Changelog.ini
 CHANGES
 config/.htbusiness.cart.generic.conf
-data/countries.csv
 data/currencies.csv
 data/customer.statuses.csv
 data/customer.types.csv
@@ -24,11 +23,9 @@ data/product.statuses.csv
 data/product.styles.csv
 data/product.types.csv
 data/products.csv
-data/raw.countries.txt
 data/raw.currencies.txt
 data/raw.languages.txt
 data/raw.order.statuses.txt
-data/raw.zones.txt
 data/street.addresses.csv
 data/tax.classes.csv
 data/tax.rates.csv
@@ -36,7 +33,6 @@ data/titles.csv
 data/weight.class.rules.csv
 data/weight.classes.csv
 data/yes.no.csv
-data/zones.csv
 docs/html/generic.cart.faq.html
 docs/pod/generic.cart.faq.pod
 htdocs/assets/css/business/cart/generic/fancy.table.css
@@ -139,7 +135,6 @@ scripts/import.products.pl
 scripts/place.orders.pl
 scripts/plot.schema.sh
 scripts/populate.tables.pl
-scripts/test.country.pl
 scripts/test.utf8.pl
 t/pod.t
 t/test.t

@@ -4,7 +4,7 @@
       "Ron Savage <ron@savage.net.au>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.110580",
+   "generated_by" : "Module::Build version 0.4, CPAN::Meta::Converter version 2.120630",
    "license" : [
       "artistic_1"
    ],
@@ -50,7 +50,6 @@
             "FindBin" : "1.5",
             "IO::File" : "1.14",
             "JSON::XS" : "2.3",
-            "Locale::SubCountry" : "1.46",
             "Log::Handler::Output::DBI" : "0.11",
             "Moose" : "0.98",
             "Path::Class" : "0.23",
@@ -58,6 +57,7 @@
             "Text::CSV_XS" : "0.8",
             "Text::Xslate" : "1.0007",
             "Try::Tiny" : "0.09",
+            "WWW::Scraper::Wikipedia::ISO3166::Database" : "1.01",
             "namespace::autoclean" : "0.09",
             "parent" : "0.224"
          }
@@ -66,63 +66,63 @@
    "provides" : {
       "Business::Cart::Generic" : {
          "file" : "lib/Business/Cart/Generic.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Base" : {
          "file" : "lib/Business/Cart/Generic/Base.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Controller" : {
          "file" : "lib/Business/Cart/Generic/Controller.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Controller::Initialize" : {
          "file" : "lib/Business/Cart/Generic/Controller/Initialize.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Controller::Order" : {
          "file" : "lib/Business/Cart/Generic/Controller/Order.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Controller::Search" : {
          "file" : "lib/Business/Cart/Generic/Controller/Search.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Database" : {
          "file" : "lib/Business/Cart/Generic/Database.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Database::Base" : {
          "file" : "lib/Business/Cart/Generic/Database/Base.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Database::Create" : {
          "file" : "lib/Business/Cart/Generic/Database/Create.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Database::Export" : {
          "file" : "lib/Business/Cart/Generic/Database/Export.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Database::Import" : {
          "file" : "lib/Business/Cart/Generic/Database/Import.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Database::Loader" : {
          "file" : "lib/Business/Cart/Generic/Database/Loader.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Database::Order" : {
          "file" : "lib/Business/Cart/Generic/Database/Order.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Database::Product" : {
          "file" : "lib/Business/Cart/Generic/Database/Product.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Database::Search" : {
          "file" : "lib/Business/Cart/Generic/Database/Search.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Schema" : {
          "file" : "lib/Business/Cart/Generic/Schema.pm",
@@ -298,35 +298,35 @@
       },
       "Business::Cart::Generic::Util::Config" : {
          "file" : "lib/Business/Cart/Generic/Util/Config.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Util::Logger" : {
          "file" : "lib/Business/Cart/Generic/Util/Logger.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::Util::Validator" : {
          "file" : "lib/Business/Cart/Generic/Util/Validator.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::View" : {
          "file" : "lib/Business/Cart/Generic/View.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::View::Base" : {
          "file" : "lib/Business/Cart/Generic/View/Base.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::View::Order" : {
          "file" : "lib/Business/Cart/Generic/View/Order.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::View::Product" : {
          "file" : "lib/Business/Cart/Generic/View/Product.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       },
       "Business::Cart::Generic::View::Search" : {
          "file" : "lib/Business/Cart/Generic/View/Search.pm",
-         "version" : "0.83"
+         "version" : "0.85"
       }
    },
    "release_status" : "stable",
@@ -335,5 +335,5 @@
          "http://opensource.org/licenses/artistic-license.php"
       ]
    },
-   "version" : "0.83"
+   "version" : "0.85"
 }
